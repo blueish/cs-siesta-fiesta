@@ -82,6 +82,17 @@ prop(wrds150, satisfies_req, communications).
 
 %% CPSC 100 levels
 
+prop(cpsc100,number,100).
+prop(cpsc100,department,cpsc).
+
+prop(cpsc103,number,103).
+prop(cpsc103,department,cpsc).
+
+prop(cpsc110,number,110).
+prop(cpsc110,department,cpsc).
+
+prop(cpsc121,number,121).
+prop(cpsc121,department,cpsc).
 
 
 % CPSC 200 levels
@@ -92,5 +103,55 @@ prop(wrds150, satisfies_req, communications).
 
 % CPSC 400 levels
 
+prop(cpsc404,number,404).
+prop(cpsc404,department,cpsc).
+
+prop(cpsc406,number,406).
+prop(cpsc406,department,cpsc).
+
+prop(cpsc410,number,410).
+prop(cpsc410,department,cpsc).
+
+prop(cpsc411,number,411).
+prop(cpsc411,department,cpsc).
+
+prop(cpsc415,number,415).
+prop(cpsc415,department,cpsc).
+
+prop(cpsc416,number,416).
+prop(cpsc416,department,cpsc).
+
+prop(cpsc418,number,418).
+prop(cpsc418,department,cpsc).
+
+prop(cpsc420,number,420).
+prop(cpsc420,department,cpsc).
+
+prop(cpsc421,number,421).
+prop(cpsc421,department,cpsc).
+
+prop(cpsc422,number,422).
+prop(cpsc422,department,cpsc).
+
+prop(cpsc424,number,424).
+prop(cpsc424,department,cpsc).
+
+prop(cpsc436D,number,436).
+prop(cpsc436D,department,cpsc).
+
+prop(cpsc444,number,444).
+prop(cpsc444,department,cpsc).
+
+prop(cpsc445,number,445).
+prop(cpsc445,department,cpsc).
+
+prop(cpsc448,number,448).
+prop(cpsc448,department,cpsc).
+
+prop(cpsc449,number,449).
+prop(cpsc449,department,cpsc).
+
+prop(cpsc490,number,490).
+prop(cpsc490,department,cpsc).
 
 
