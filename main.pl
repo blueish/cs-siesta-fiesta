@@ -9,12 +9,12 @@
 % Graduation requirements
 graduated :-
 	communications,
-	arts, 
-	electives,
-	first_year_reqs, 
-	second_year_cpsc_reqs, 
-	second_year_math_stats_reqs, 
-	third_and_fourth_cpsc_reqs.
+	arts, % joel
+	electives, %sam 
+	first_year_reqs,  %sam 
+	second_year_cpsc_reqs,  %sam 
+	second_year_math_stats_reqs,  %sam 
+	third_and_fourth_cpsc_reqs. % joel
 
 
 % sub requirements in graduation
