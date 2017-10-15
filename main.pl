@@ -22,8 +22,6 @@ communications :-
 
 
 
-
-
 %% PROP TRIPLES
 
 % CPSC is the example for all of these prop vals
@@ -33,8 +31,9 @@ prop(cpsc312, number, 312).
 
 % prop(courseID, completed, X) is true when a course has been completed with X being one of {true, false}
 prop(cpsc312, completed, false).
-% prop(courseID, faculty, X) is true when a course is part of faculty X
-prop(cpsc312, faculty, scie). 
+
+% prop(courseID, department, X) is true when a course is part of department X
+prop(cpsc312, department, scie). 
 
 % prop(courseID, satisfies_req, X) is true when a course satisfies part of the requirement of X
 prop(cpsc312, satisfies_req, third_and_fourth_cpsc_reqs).
@@ -58,3 +57,10 @@ prop(apsc176, satisfies_req, communications).
 prop(astu100, satisfies_req, communications).
 prop(astu150, satisfies_req, communications).
 prop(wrds150, satisfies_req, communications). 
+
+
+
+
+
+
+%% 
