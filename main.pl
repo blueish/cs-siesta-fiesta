@@ -11,9 +11,9 @@ graduated :-
 	communications,
 	arts, % joel
 	electives, %sam 
-	first_year_reqs,  %sam 
-	second_year_cpsc_reqs,  %sam 
-	second_year_math_stats_reqs,  %sam 
+	first_year_reqs,  %sam  todo
+	second_year_cpsc_reqs,  %sam  done
+	second_year_math_stats_reqs,  %sam done
 	third_and_fourth_cpsc_reqs. % joel
 
 
@@ -36,6 +36,46 @@ fourth_helper(Acc, CoursesLookedAt) :-
 	three_h_level(A),
 	CreditsGotten is X + Acc,
 	fourth_helper(CreditsGotten, [ A | CoursesLookedAt ]). 
+
+
+first_year_reqs :-
+	prop(cpsc110, completed, 4),
+	prop(cpsc121, completed, 4),
+	math100_eqs,
+	math101_eqs,
+	physical_science_req,
+	bio_req.
+
+second_year_cpsc_reqs :-
+	prop(cpsc210, completed, 4),
+	prop(cpsc213, completed, 4),
+	prop(cpsc221, completed, 4),
+	prop(math200, completed, 3),
+	prop(math221, completed, 3).
+
+% two options: STAT200 & MATH/STAT 302, or STAT241 and 1 extra elective (can count all credits)
+second_year_math_stats_reqs :-
+	prop(stat200, completed, 3),
+	prop(math302, completed, 3).
+
+second_year_math_stats_reqs :-
+	prop(stat200, completed, 3),
+	prop(stat302, completed, 3).
+
+second_year_math_stats_reqs :-
+	prop(stat241, completed, 4).
+
+
+electives :-
+	breadth_credits.
+	credits_earned_extra.
+
+breadth_credits :-
+	prop(A, department, C),
+	dif(C, cpsc),
+	dif(C, math),
+	dif(C, stats).
+
 	
 
 %% ----------------------------------------------------------------
@@ -81,6 +121,30 @@ prop(astu150, satisfies_req, communications).
 prop(wrds150, satisfies_req, communications). 
 
 
+% First Year requirements helpers
+
+math100_eqs :- prop(math100, completed, 3).
+math100_eqs :- prop(math102, completed, 3).
+math100_eqs :- prop(math104, completed, 3).
+math100_eqs :- prop(math110, completed, 3).
+math100_eqs :- prop(math111, completed, 3).
+math100_eqs :- prop(math120, completed, 3).
+math100_eqs :- prop(math180, completed, 3).
+math100_eqs :- prop(math184, completed, 3).
+
+math101_eqs :- prop(math101, completed, 3).
+math101_eqs :- prop(math103, completed, 3).
+math101_eqs :- prop(math105, completed, 3).
+math101_eqs :- prop(math121, completed, 3).
+
+
+% TODO
+% physical science req
+% 100-Level CHEM or PHYS courses. PHYS100 and CHEM111 do not count for this requirement. Students without high school Chemistry 12 must also take CHEM111. Students without high school Physics 12 must also take PHYS100.
+physical_science_req.
+
+% Students without high school Biology 11 or 12 must complete BIOL111. Students with high school Biology 11 or 12 must take 3 credits in any ASTR, ATSC, BIOL, EOSC, or GEOB lecture course.
+bio_req.
 
 
 
