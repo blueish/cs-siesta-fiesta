@@ -115,9 +115,58 @@ prop(cpsc210, department, cpsc).
 prop(cpsc213, number, 213).
 prop(cpsc213, department, cpsc). 
 
+prop(cpsc221, number, 221).
+prop(cpsc221, department, cpsc). 
 
 
 % CPSC 300 levels
+prop(cpsc301, number, 301).
+prop(cpsc301, department, cpsc). 
+
+prop(cpsc302, number, 302).
+prop(cpsc302, department, cpsc). 
+
+prop(cpsc303, number, 303).
+prop(cpsc303, department, cpsc). 
+
+prop(cpsc304, number, 304).
+prop(cpsc304, department, cpsc). 
+
+prop(cpsc310, number, 310).
+prop(cpsc310, department, cpsc). 
+
+prop(cpsc311, number, 311).
+prop(cpsc311, department, cpsc). 
+
+prop(cpsc312, number, 312).
+prop(cpsc312, department, cpsc). 
+
+prop(cpsc313, number, 313).
+prop(cpsc313, department, cpsc). 
+
+prop(cpsc314, number, 314).
+prop(cpsc314, department, cpsc). 
+
+prop(cpsc317, number, 317).
+prop(cpsc317, department, cpsc). 
+
+prop(cpsc319, number, 319).
+prop(cpsc319, department, cpsc). 
+
+prop(cpsc320, number, 320).
+prop(cpsc320, department, cpsc). 
+
+prop(cpsc322, number, 322).
+prop(cpsc322, department, cpsc). 
+
+prop(cpsc340, number, 340).
+prop(cpsc340, department, cpsc). 
+
+prop(cpsc344, number, 344).
+prop(cpsc344, department, cpsc). 
+
+prop(cpsc349, number, 349).
+prop(cpsc349, department, cpsc). 
 
 
 % CPSC 400 levels
