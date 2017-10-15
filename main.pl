@@ -1,6 +1,11 @@
 
 
 
+
+
+%% ----------------------------------------------------------------
+%% 						TOP LEVEL REQUIREMENTS 
+%% ----------------------------------------------------------------
 % Graduation requirements
 graduated :-
 	communications,
@@ -21,8 +26,9 @@ communications :-
 	dif(A,B).
 
 
-
-%% PROP TRIPLES
+%% ----------------------------------------------------------------
+%% 						PROPERTY TRIPLES FORM 
+%% ----------------------------------------------------------------
 
 % CPSC is the example for all of these prop vals
 
@@ -40,8 +46,12 @@ prop(cpsc312, satisfies_req, third_and_fourth_cpsc_reqs).
 
 % prop(courseID, satisfies_req, true) is true when courseID satisfies the requirement for satisfies_req
 
-%prop(engl100, completed, true).
-%prop(engl121, completed, true).
+
+
+
+%% ----------------------------------------------------------------
+%% 					COURSE SPECIFICATION REQUIREMENTS 
+%% ----------------------------------------------------------------
 
 % communications requirement:
 % ENGL 100, 110, 111, 112 (recommended), 120, 121; SCIE 113, 300; APSC 176; ASTU 100, 150; WRDS 150 
@@ -63,4 +73,24 @@ prop(wrds150, satisfies_req, communications).
 
 
 
-%% 
+
+%% ----------------------------------------------------------------
+%% 						COURSE DECLARATIONS
+%% ----------------------------------------------------------------
+
+%% CPSC COURSE DECLARATIONS
+
+%% CPSC 100 levels
+
+
+
+% CPSC 200 levels
+
+
+% CPSC 300 levels
+
+
+% CPSC 400 levels
+
+
+
