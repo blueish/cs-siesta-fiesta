@@ -25,6 +25,18 @@ communications :-
 	prop(B, completed, true),
 	dif(A,B).
 
+fourth :-
+	fourth_helper(NumberOfCreditsEarned, [0]),
+	NumberOfCreditsEarned > 3.
+
+fourth_helper(Acc, CoursesLookedAt) :-
+	member(M, CoursesLookedAt).
+	dif(M, A),
+	prop(A, completed, X),
+	three_h_level(A),
+	CreditsGotten is X + Acc,
+	fourth_helper(CreditsGotten, [ A | CoursesLookedAt ]). 
+	
 
 %% ----------------------------------------------------------------
 %% 						PROPERTY TRIPLES FORM 
@@ -96,6 +108,13 @@ prop(cpsc121,department,cpsc).
 
 
 % CPSC 200 levels
+
+prop(cpsc210, number, 210).
+prop(cpsc210, department, cpsc). 
+
+prop(cpsc213, number, 213).
+prop(cpsc213, department, cpsc). 
+
 
 
 % CPSC 300 levels
