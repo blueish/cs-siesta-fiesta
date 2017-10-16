@@ -8,22 +8,45 @@
 %% ----------------------------------------------------------------
 % Graduation requirements
 graduated :-
+<<<<<<< HEAD
 	communications,
 	arts, % joel
 	electives, %sam 
 	first_year_reqs,  %sam  todo
 	second_year_cpsc_reqs,  %sam  done
 	second_year_math_stats_reqs,  %sam done
+=======
+	communications_reqs,
+	arts_reqs, % joel
+	electives_reqs, %sam 
+	first_year_reqs,  %sam 
+	second_year_cpsc_reqs,  %sam 
+	second_year_math_stats_reqs,  %sam 
+>>>>>>> 542734ed59dab122c9c453e261c75062b9b4fdbc
 	third_and_fourth_cpsc_reqs. % joel
 
 
 % sub requirements in graduation
-communications :-
+communications_reqs :-
 	prop(A, satisfies_req, communications),
 	prop(B, satisfies_req, communications),
 	prop(A, completed, true),
 	prop(B, completed, true),
 	dif(A,B).
+
+%arts requirement
+%All courses in the Faculty of Arts are eligible to fulfill the Arts Requirement.
+arts_reqs :- 
+	arts_helper(NumberOfCreditsEarned, [0]),
+	NumberOfCreditsEarned >= 12.
+
+arts_helper(Acc, CoursesLookedAt) :-
+	member(M, CoursesLookedAt),
+	dif(M,A),
+	prop(A, completed, X),
+	prop(A, faculty, arts),
+	arts_helper(X + Acc, [A | CoursesLookedAt]).
+
 
 fourth :-
 	fourth_helper(NumberOfCreditsEarned, [0]),
@@ -34,6 +57,7 @@ fourth_helper(Acc, CoursesLookedAt) :-
 	dif(M, A),
 	prop(A, completed, X),
 	three_h_level(A),
+<<<<<<< HEAD
 	CreditsGotten is X + Acc,
 	fourth_helper(CreditsGotten, [ A | CoursesLookedAt ]). 
 
@@ -76,6 +100,9 @@ breadth_credits :-
 	dif(C, math),
 	dif(C, stats).
 
+=======
+	fourth_helper(X + Acc, [ A | CoursesLookedAt ]). 
+>>>>>>> 542734ed59dab122c9c453e261c75062b9b4fdbc
 	
 
 %% ----------------------------------------------------------------
@@ -145,8 +172,6 @@ physical_science_req.
 
 % Students without high school Biology 11 or 12 must complete BIOL111. Students with high school Biology 11 or 12 must take 3 credits in any ASTR, ATSC, BIOL, EOSC, or GEOB lecture course.
 bio_req.
-
-
 
 
 
@@ -287,3 +312,124 @@ prop(cpsc490,number,490).
 prop(cpsc490,department,cpsc).
 
 
+%% ----------------------------------------------------------------
+%% 						DEPARTMENT DECLARATIONS
+%% ----------------------------------------------------------------
+
+%Course A is in the faculty of B if A is in the 
+%department of C, and C is in B (Transitive Law)
+%prop(A,faculty,B) :- prop(A,department C).
+
+%departments in the faculty of science
+prop(A,faculty,scie) :- prop(A, department, cpsc).
+prop(A,faculty,scie) :- prop(A, department, envr).
+prop(A,faculty,scie) :- prop(A, department, arc).
+prop(A,faculty,scie) :- prop(A, department, fish).
+prop(A,faculty,scie) :- prop(A, department, biot).
+prop(A,faculty,scie) :- prop(A, department, bota).
+prop(A,faculty,scie) :- prop(A, department, math).
+prop(A,faculty,scie) :- prop(A, department, astr).
+prop(A,faculty,scie) :- prop(A, department, enph).
+prop(A,faculty,scie) :- prop(A, department, res).
+prop(A,faculty,scie) :- prop(A, department, mrne).
+prop(A,faculty,scie) :- prop(A, department, gsat).
+prop(A,faculty,scie) :- prop(A, department, atsc).
+prop(A,faculty,scie) :- prop(A, department, zool).
+prop(A,faculty,scie) :- prop(A, department, stat).
+prop(A,faculty,scie) :- prop(A, department, dsci).
+prop(A,faculty,scie) :- prop(A, department, asic).
+prop(A,faculty,scie) :- prop(A, department, scie).
+prop(A,faculty,scie) :- prop(A, department, isci).
+prop(A,faculty,scie) :- prop(A, department, cspw).
+prop(A,faculty,scie) :- prop(A, department, cogs).
+prop(A,faculty,scie) :- prop(A, department, chem).
+prop(A,faculty,scie) :- prop(A, department, phys).
+prop(A,faculty,scie) :- prop(A, department, biol).
+prop(A,faculty,scie) :- prop(A, department, micb).
+
+
+
+%departments in the faculty of arts
+prop(A,faculty,arts) :- prop(A, department, seal).
+prop(A,faculty,arts) :- prop(A, department, geog).
+prop(A,faculty,arts) :- prop(A, department, arbc).
+prop(A,faculty,arts) :- prop(A, department, korn).
+prop(A,faculty,arts) :- prop(A, department, wrds).
+prop(A,faculty,arts) :- prop(A, department, ling).
+prop(A,faculty,arts) :- prop(A, department, japn).
+prop(A,faculty,arts) :- prop(A, department, arcl).
+prop(A,faculty,arts) :- prop(A, department, itst).
+prop(A,faculty,arts) :- prop(A, department, ital).
+prop(A,faculty,arts) :- prop(A, department, nest).
+prop(A,faculty,arts) :- prop(A, department, info).
+prop(A,faculty,arts) :- prop(A, department, indo).
+prop(A,faculty,arts) :- prop(A, department, anth).
+prop(A,faculty,arts) :- prop(A, department, iest).
+prop(A,faculty,arts) :- prop(A, department, iar).
+prop(A,faculty,arts) :- prop(A, department, arth).
+prop(A,faculty,arts) :- prop(A, department, urst).
+prop(A,faculty,arts) :- prop(A, department, ukrn).
+prop(A,faculty,arts) :- prop(A, department, hist).
+prop(A,faculty,arts) :- prop(A, department, tibt).
+prop(A,faculty,arts) :- prop(A, department, thtr).
+prop(A,faculty,arts) :- prop(A, department, swed).
+prop(A,faculty,arts) :- prop(A, department, hinu).
+prop(A,faculty,arts) :- prop(A, department, heso).
+prop(A,faculty,arts) :- prop(A, department, span).
+prop(A,faculty,arts) :- prop(A, department, hebr).
+prop(A,faculty,arts) :- prop(A, department, ccst).
+prop(A,faculty,arts) :- prop(A, department, cdst).
+prop(A,faculty,arts) :- prop(A, department, arts).
+prop(A,faculty,arts) :- prop(A, department, cens).
+prop(A,faculty,arts) :- prop(A, department, asia).
+prop(A,faculty,arts) :- prop(A, department, soci).
+prop(A,faculty,arts) :- prop(A, department, chil).
+prop(A,faculty,arts) :- prop(A, department, chin).
+prop(A,faculty,arts) :- prop(A, department, mdvl).
+prop(A,faculty,arts) :- prop(A, department, asla).
+prop(A,faculty,arts) :- prop(A, department, clch).
+prop(A,faculty,arts) :- prop(A, department, clst).
+prop(A,faculty,arts) :- prop(A, department, grsj).
+prop(A,faculty,arts) :- prop(A, department, cnrs).
+prop(A,faculty,arts) :- prop(A, department, cnto).
+prop(A,faculty,arts) :- prop(A, department, grek).
+prop(A,faculty,arts) :- prop(A, department, soal).
+prop(A,faculty,arts) :- prop(A, department, gpp).
+prop(A,faculty,arts) :- prop(A, department, germ).
+prop(A,faculty,arts) :- prop(A, department, acam).
+prop(A,faculty,arts) :- prop(A, department, geob).
+prop(A,faculty,arts) :- prop(A, department, visa).
+prop(A,faculty,arts) :- prop(A, department, slav).
+prop(A,faculty,arts) :- prop(A, department, crwr).
+prop(A,faculty,arts) :- prop(A, department, csis).
+prop(A,faculty,arts) :- prop(A, department, astu).
+prop(A,faculty,arts) :- prop(A, department, ctln).
+prop(A,faculty,arts) :- prop(A, department, dani).
+prop(A,faculty,arts) :- prop(A, department, pers).
+prop(A,faculty,arts) :- prop(A, department, latn).
+prop(A,faculty,arts) :- prop(A, department, scan).
+prop(A,faculty,arts) :- prop(A, department, phil).
+prop(A,faculty,arts) :- prop(A, department, dmed).
+prop(A,faculty,arts) :- prop(A, department, sans).
+prop(A,faculty,arts) :- prop(A, department, fren).
+prop(A,faculty,arts) :- prop(A, department, russ).
+prop(A,faculty,arts) :- prop(A, department, fnis).
+prop(A,faculty,arts) :- prop(A, department, fnel).
+prop(A,faculty,arts) :- prop(A, department, fnel).
+prop(A,faculty,arts) :- prop(A, department, fmst).
+prop(A,faculty,arts) :- prop(A, department, fist).
+prop(A,faculty,arts) :- prop(A, department, afst).
+prop(A,faculty,arts) :- prop(A, department, last).
+prop(A,faculty,arts) :- prop(A, department, rmst).
+prop(A,faculty,arts) :- prop(A, department, poli).
+prop(A,faculty,arts) :- prop(A, department, rgla).
+prop(A,faculty,arts) :- prop(A, department, engl).
+prop(A,faculty,arts) :- prop(A, department, relg).
+prop(A,faculty,arts) :- prop(A, department, laso).
+prop(A,faculty,arts) :- prop(A, department, punj).
+prop(A,faculty,arts) :- prop(A, department, psyc).
+prop(A,faculty,arts) :- prop(A, department, fipr).
+prop(A,faculty,arts) :- prop(A, department, fhis).
+prop(A,faculty,arts) :- prop(A, department, port).
+prop(A,faculty,arts) :- prop(A, department, pols).
+prop(A,faculty,arts) :- prop(A, department, fact).
