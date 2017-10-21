@@ -27,49 +27,38 @@ communications_reqs :-
 
 %arts requirement
 %All courses in the Faculty of Arts are eligible to fulfill the Arts Requirement.
-arts_reqs :- 
-	arts_helper(NumberOfCreditsEarned, [0]),
-	NumberOfCreditsEarned >= 12.
 
-arts_helper(Acc, CoursesLookedAt) :-
-	member(M, CoursesLookedAt),
-	dif(M,A),
-	prop(A, completed, X),
-	prop(A, faculty, arts),
-	arts_helper(X + Acc, [A | CoursesLookedAt]).
-
-
-%requirements will act as an accumulator of # Courses s.t. satisfies_arts(Course) = true
+%requirements will act as an accumulator of # Course where satisfies_arts(Course) = true
 %transcript is an input list of course codes (cpsc312)
 %Result is Transcript - Requirements
-arts_reqs(Transcript, Result) :- 
-	arts2(Transcript, Requirements, Result).
+%arts_reqs(Transcript, Result) :- 
+%	arts2(Transcript, Requirements, Result).
 
 %TODO there needs to be a declaration of prop(course, department, dept) for each course we want to recognize.
 satisfies_arts(Course) :- 
 	prop(Course, faculty, arts).
 
-
-%arts2 true if all elements of transcript fulfill requirements list
-arts2(T,R,T) :-
-	length(R,Int),
-	Int = 4.
-	
-arts2([H | T], R, L) :- 
-	satisfies_arts(H),
-	arts2(T,[H|R],L).
+%sampling of arts courses for testing
+prop(psyc100,department,psyc).
+prop(psyc101,department,psyc).
+prop(crwr230,department,crwr).
+prop(phil120,department,phil).
 
 
-fourth :-
-	fourth_helper(NumberOfCreditsEarned, [0]),
-	NumberOfCreditsEarned > 3.
+%pull_arts_course_from_trans is true when ResultTrans is Transcript - ResultCourse where ResultCourse is faculty of arts
+pull_arts_course_from_trans(Transcript, ResultCourse, ResultTrans) :-
+	satisfies_arts(ResultCourse),
+	member(ResultCourse, Transcript),
+	select(ResultCourse, Transcript, ResultTrans).
 
-fourth_helper(Acc, CoursesLookedAt) :-
-	member(M, CoursesLookedAt),
-	dif(M, A),
-	prop(A, completed, X),
-	three_h_level(A),
-	fourth_helper(X + Acc, [ A | CoursesLookedAt ]). 
+
+%arts is true when Result is Transcript - (4 courses that satisfy arts reqs)
+arts(Transcript, Result) :-
+	pull_arts_course_from_trans(Transcript, ResultCourse1, ResultTrans1),
+	pull_arts_course_from_trans(ResultTrans1, ResultCourse2, ResultTrans2),
+	pull_arts_course_from_trans(ResultTrans2, ResultCourse3, ResultTrans3),
+	pull_arts_course_from_trans(ResultTrans3, ResultCourse4, Result),
+	mysub(Transcript,[ResultCourse1,ResultCourse2,ResultCourse3,ResultCourse4],Result).
 
 first_year_reqs :-
 	prop(cpsc110, completed, 4),
@@ -150,7 +139,7 @@ prop(cpsc312, department, scie).
 prop(cpsc312, satisfies_req, third_and_fourth_cpsc_reqs).
 
 % prop(courseID, satisfies_req, true) is true when courseID satisfies the requirement for satisfies_req
-?
+
 
 
 
