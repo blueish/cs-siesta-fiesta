@@ -7,28 +7,23 @@
 %% ----------------------------------------------------------------
 % Graduation requirements
 graduated :-
-	communications,
+	communications, % done
 	arts, % joel
 	electives, %sam 
 	first_year_reqs,  %sam  todo
 	second_year_cpsc_reqs,  %sam  done
 	second_year_math_stats_reqs,  %sam done
-	third_and_fourth_cpsc_reqs. % joel
+	third_and_fourth_cpsc_reqs. % joel done
 
+% try
+% new_graduated([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241]).
 new_graduated(Transcript) :-
 	first_year_reqs(Transcript, R1),
 	second_year_cpsc_reqs(R1, R2),
-	second_year_math_stats_reqs(R2, R3).
+	second_year_math_stats_reqs(R2, R3),
+	third_and_fourth_cpsc_reqs(R3, R4)
+	communications_reqs(R4, R5).
 
-
-
-% sub requirements in graduation
-communications_reqs :-
-	prop(A, satisfies_req, communications_reqs),
-	prop(B, satisfies_req, communications_reqs),
-	prop(A, completed, 3),
-	prop(B, completed, 3),
-	dif(A,B).
 
 
 %arts requirement
@@ -58,6 +53,7 @@ pull_arts_course_from_trans(Transcript, ResultCourse, ResultTrans) :-
 	select(ResultCourse, Transcript, ResultTrans).
 
 
+<<<<<<< HEAD
 %arts is true when Result is Transcript - (4 courses that satisfy arts reqs)
 arts(Transcript, Result) :-
 	pull_arts_course_from_trans(Transcript, ResultCourse1, ResultTrans1),
@@ -65,6 +61,18 @@ arts(Transcript, Result) :-
 	pull_arts_course_from_trans(ResultTrans2, ResultCourse3, ResultTrans3),
 	pull_arts_course_from_trans(ResultTrans3, ResultCourse4, Result),
 	mysub(Transcript,[ResultCourse1,ResultCourse2,ResultCourse3,ResultCourse4],Result).
+=======
+%% fourth :-
+%% 	fourth_helper(NumberOfCreditsEarned, [0]),
+%% 	NumberOfCreditsEarned > 3.
+
+%% fourth_helper(Acc, CoursesLookedAt) :-
+%% 	member(M, CoursesLookedAt),
+%% 	dif(M, A),
+%% 	prop(A, completed, X),
+%% 	three_h_level(A),
+%% 	fourth_helper(X + Acc, [ A | CoursesLookedAt ]). 
+>>>>>>> add third and fourth and comm reqs
 
 first_year_reqs(Transcript, R3) :-
 	% the two comp scis
@@ -88,6 +96,7 @@ second_year_math_stats_reqs(Transcript, RestOfTranscript) :-
 	remove_courses_from_transcript( Transcript, [ stat200, stat302 ], RestOfTranscript).
 second_year_math_stats_reqs(Transcript, RestOfTranscript) :-
 	remove_courses_from_transcript( Transcript, [ stat241 ], RestOfTranscript).
+
 
 
 electives :-
@@ -183,6 +192,50 @@ physical_science_req.
 bio_req.
 
 
+%% --------------- THIRD AND FOURTH REQS
+
+% try:
+% third_and_fourth_cpsc_reqs([ cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241 ], R).
+third_and_fourth_cpsc_reqs(Transcript, R3) :-
+	remove_courses_from_transcript(Transcript, [cpsc310, cpsc313, cpsc320], R1),
+	three_h_levels(R1, R2),
+	four_h_levels(R2, R3).
+	
+
+three_h_levels(Transcript, R3) :-
+	pull_three_level(Transcript, _, R1),
+	pull_three_level(R1, _, R2),
+	pull_three_level(R2, _, R3).
+
+% pull_three_level(T, C, R) is true when a course that is a three hundred level cpsc course is C and R is T with C removed
+pull_three_level(Transcript, Course, R) :-
+	prop(Course, number, CourseNumber),
+	prop(Course, department, cpsc),
+	CourseNumber >= 300,
+	CourseNumber < 400,
+	select(Course, Transcript, R).
+
+
+four_h_levels(Transcript, R3) :-
+	pull_four_level(Transcript, _, R1),
+	pull_four_level(R1,         _, R2),
+	pull_four_level(R2,         _, R3).
+
+pull_four_level(Transcript, Course, R) :-
+	prop(Course, number, CourseNumber),
+	prop(Course, department, cpsc),
+	CourseNumber >= 400,
+	select(Course, Transcript, R).
+
+
+
+% ------------------ communications reqs 
+
+communications_reqs(Transcript, R) :-
+	prop(A, satisfies_req, communications),
+	prop(B, satisfies_req, communications),
+	dif(A,B),
+	remove_courses_from_transcript(Transcript, [ A, B ], R).
 
 %% ----------------------------------------------------------------
 %% 						COURSE DECLARATIONS
