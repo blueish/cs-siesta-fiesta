@@ -53,7 +53,6 @@ pull_arts_course_from_trans(Transcript, ResultCourse, ResultTrans) :-
 	select(ResultCourse, Transcript, ResultTrans).
 
 
-<<<<<<< HEAD
 %arts is true when Result is Transcript - (4 courses that satisfy arts reqs)
 arts(Transcript, Result) :-
 	pull_arts_course_from_trans(Transcript, ResultCourse1, ResultTrans1),
@@ -61,18 +60,6 @@ arts(Transcript, Result) :-
 	pull_arts_course_from_trans(ResultTrans2, ResultCourse3, ResultTrans3),
 	pull_arts_course_from_trans(ResultTrans3, ResultCourse4, Result),
 	mysub(Transcript,[ResultCourse1,ResultCourse2,ResultCourse3,ResultCourse4],Result).
-=======
-%% fourth :-
-%% 	fourth_helper(NumberOfCreditsEarned, [0]),
-%% 	NumberOfCreditsEarned > 3.
-
-%% fourth_helper(Acc, CoursesLookedAt) :-
-%% 	member(M, CoursesLookedAt),
-%% 	dif(M, A),
-%% 	prop(A, completed, X),
-%% 	three_h_level(A),
-%% 	fourth_helper(X + Acc, [ A | CoursesLookedAt ]). 
->>>>>>> add third and fourth and comm reqs
 
 first_year_reqs(Transcript, R3) :-
 	% the two comp scis
