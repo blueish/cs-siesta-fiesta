@@ -55,7 +55,7 @@ arts_reqs(Transcript) :-
 satisfies_arts(Course) :- 
 	prop(Course, faculty, arts).
 
-credits_length(Requirements) :- 
+% credits_length(Requirements) :- 
 
 
 
@@ -86,29 +86,9 @@ first_year_reqs(Transcript, R3) :-
 	physical_science_req,
 	bio_req.
 
-% will be true when the final element is a list of courses used to fulfill the req
-
-%% second_year_cpsc_reqs :-
-%% 	prop(cpsc210, completed, 4),
-%% 	prop(cpsc213, completed, 4),
-%% 	prop(cpsc221, completed, 4),
-%% 	prop(math200, completed, 3),
-%% 	prop(math221, completed, 3).
-
-%second_helper(Input, RestNeeded, Final) is true when RestNeeded is the courses needed to fulfill this req, 
-% Final is the courses used to fulfill this req, and Final exists in Input
-%second_helper(Input, [], L) :-
-%	all_are_members_of(L, Input),
-
 
 second_year_cpsc_reqs(Transcript, RestOfTranscript) :- 
 	remove_courses_from_transcript(Transcript, [ cpsc210, cpsc213, cpsc221, math200, math221 ], RestOfTranscript).
-
-% remove_courses_from_transcript(T, C, R) is true when C is a subset of T and R is T - C (set difference)
-remove_courses_from_transcript(R, [], R).
-remove_courses_from_transcript(Transcript, [ Acourse | RestRequired ], X) :-
-	select(Acourse, Transcript, DeleteResult),
-	remove_courses_from_transcript(DeleteResult, RestRequired, X).
 
 
 
@@ -132,6 +112,17 @@ breadth_credits :-
 	dif(C, math),
 	dif(C, stats).
 	
+
+%% ----------------------------------------------------------------
+%% 						HELPER METHODS
+%% ----------------------------------------------------------------
+
+% remove_courses_from_transcript(T, C, R) is true when C is a subset of T and R is T - C (set difference)
+remove_courses_from_transcript(R, [], R).
+remove_courses_from_transcript(Transcript, [ Acourse | RestRequired ], X) :-
+	select(Acourse, Transcript, DeleteResult),
+	remove_courses_from_transcript(DeleteResult, RestRequired, X).
+
 
 %% ----------------------------------------------------------------
 %% 						PROPERTY TRIPLES FORM 
@@ -175,7 +166,7 @@ prop(astu150, satisfies_req, communications).
 prop(wrds150, satisfies_req, communications). 
 
 
-% First Year requirements helpers
+% -----------------------   First Year requirements 
 
 % any of these math courses fulfill math100 
 math100_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math100], R).
