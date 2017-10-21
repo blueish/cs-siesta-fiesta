@@ -42,20 +42,19 @@ arts_helper(Acc, CoursesLookedAt) :-
 %requirements will act as an accumulator of # Courses s.t. satisfies_arts(Course) = true
 %transcript is an input list of course codes (cpsc312)
 %Result is Transcript - Requirements
-arts_reqs(Transcript) :- 
+arts_reqs(Transcript, Result) :- 
 	arts2(Transcript, Requirements, Result).
 
 %TODO there needs to be a declaration of prop(course, department, dept) for each course we want to recognize.
 satisfies_arts(Course) :- 
 	prop(Course, faculty, arts).
 
-credits_length(Requirements) :- 
-
-
 
 %arts2 true if all elements of transcript fulfill requirements list
 arts2(T,R,T) :-
-	credits_length(R).
+	length(R,Int),
+	Int = 4.
+	
 arts2([H | T], R, L) :- 
 	satisfies_arts(H),
 	arts2(T,[H|R],L).
