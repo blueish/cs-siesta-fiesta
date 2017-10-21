@@ -95,19 +95,16 @@ first_year_reqs :-
 
 
 
-% TODO: change CoursesFulfilled to be the inverse, e.g. the courses minus cpsc210
-second_year_cpsc_reqs(Transcript, CoursesFulfilled) :- 
-	second_year_helper_v2(Transcript, [ cpsc210, cpsc213, cpsc221, math200, math221 ], CoursesFulfilled).
+% TODO: change RestOfTranscript to be the inverse, e.g. the courses minus cpsc210
+second_year_cpsc_reqs(Transcript, RestOfTranscript) :- 
+	mysub(Transcript, [ cpsc210, cpsc213, cpsc221, math200, math221 ], RestOfTranscript).
 
-% second year helper(Transcript, CourseRequirements, CoursesFulfilled)
-% is true if and only if CourseRequirements is a subset of Transcript, and is in CoursesFulfilled
-second_year_helper_v2(Transcript, [], CoursesFulfilled).
+% mysub(B, M, R) is true when M is a subset of B and R is B - M (set difference)
+mysub(R, [], R).
+mysub(Transcript, [ Acourse | RestRequired ], X) :-
+	select(Acourse, Transcript, DeleteResult),
+	mysub(DeleteResult, RestRequired, X).
 
-% when the heads match
-second_year_helper_v2(Transcript, [H | T] , [ H | CoursesFulfilled ]) :-
-	member(H, Transcript),
-	second_year_helper_v2(Transcript, T, CoursesFulfilled).
-	
 
 
 % two options: STAT200 & MATH/STAT 302, or STAT241 and 1 extra elective (can count all credits)
