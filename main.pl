@@ -15,6 +15,12 @@ graduated :-
 	second_year_math_stats_reqs,  %sam done
 	third_and_fourth_cpsc_reqs. % joel
 
+new_graduated(Transcript) :-
+	first_year_reqs(Transcript, R1),
+	second_year_cpsc_reqs(R1, R2),
+	second_year_math_stats_reqs(R2, R3).
+
+
 
 % sub requirements in graduation
 communications_reqs :-
@@ -72,11 +78,11 @@ fourth_helper(Acc, CoursesLookedAt) :-
 	three_h_level(A),
 	fourth_helper(X + Acc, [ A | CoursesLookedAt ]). 
 
-first_year_reqs :-
-	prop(cpsc110, completed, 4),
-	prop(cpsc121, completed, 4),
-	math100_eqs,
-	math101_eqs,
+first_year_reqs(Transcript, R3) :-
+	% the two comp scis
+	remove_courses_from_transcript(Transcript, [ cpsc110, cpsc121 ], R1),
+	math100_eqs(R1, R2),
+	math101_eqs(R2, R3),
 	physical_science_req,
 	bio_req.
 
@@ -95,30 +101,25 @@ first_year_reqs :-
 %	all_are_members_of(L, Input),
 
 
-
-% TODO: change RestOfTranscript to be the inverse, e.g. the courses minus cpsc210
 second_year_cpsc_reqs(Transcript, RestOfTranscript) :- 
-	mysub(Transcript, [ cpsc210, cpsc213, cpsc221, math200, math221 ], RestOfTranscript).
+	remove_courses_from_transcript(Transcript, [ cpsc210, cpsc213, cpsc221, math200, math221 ], RestOfTranscript).
 
-% mysub(B, M, R) is true when M is a subset of B and R is B - M (set difference)
-mysub(R, [], R).
-mysub(Transcript, [ Acourse | RestRequired ], X) :-
+% remove_courses_from_transcript(T, C, R) is true when C is a subset of T and R is T - C (set difference)
+remove_courses_from_transcript(R, [], R).
+remove_courses_from_transcript(Transcript, [ Acourse | RestRequired ], X) :-
 	select(Acourse, Transcript, DeleteResult),
-	mysub(DeleteResult, RestRequired, X).
+	remove_courses_from_transcript(DeleteResult, RestRequired, X).
 
 
 
 % two options: STAT200 & MATH/STAT 302, or STAT241 and 1 extra elective (can count all credits)
-second_year_math_stats_reqs :-
-	prop(stat200, completed, 3),
-	prop(math302, completed, 3).
-
-second_year_math_stats_reqs :-
-	prop(stat200, completed, 3),
-	prop(stat302, completed, 3).
-
-second_year_math_stats_reqs :-
-	prop(stat241, completed, 4).
+% second_year_math_stats_reqs(T, R) is true when R is T minus the required math/stats courses 
+second_year_math_stats_reqs(Transcript, RestOfTranscript) :-
+	remove_courses_from_transcript( Transcript, [ stat200, math302 ], RestOfTranscript).
+second_year_math_stats_reqs(Transcript, RestOfTranscript) :-
+	remove_courses_from_transcript( Transcript, [ stat200, stat302 ], RestOfTranscript).
+second_year_math_stats_reqs(Transcript, RestOfTranscript) :-
+	remove_courses_from_transcript( Transcript, [ stat241 ], RestOfTranscript).
 
 
 electives :-
@@ -151,7 +152,6 @@ prop(cpsc312, department, scie).
 prop(cpsc312, satisfies_req, third_and_fourth_cpsc_reqs).
 
 % prop(courseID, satisfies_req, true) is true when courseID satisfies the requirement for satisfies_req
-?
 
 
 
@@ -177,19 +177,22 @@ prop(wrds150, satisfies_req, communications).
 
 % First Year requirements helpers
 
-math100_eqs :- prop(math100, completed, 3).
-math100_eqs :- prop(math102, completed, 3).
-math100_eqs :- prop(math104, completed, 3).
-math100_eqs :- prop(math110, completed, 3).
-math100_eqs :- prop(math111, completed, 3).
-math100_eqs :- prop(math120, completed, 3).
-math100_eqs :- prop(math180, completed, 3).
-math100_eqs :- prop(math184, completed, 3).
+% any of these math courses fulfill math100 
+math100_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math100], R).
+math100_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math102], R).
+math100_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math104], R).
+math100_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math110], R).
+math100_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math111], R).
+math100_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math120], R).
+math100_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math180], R).
+math100_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math184], R).
 
-math101_eqs :- prop(math101, completed, 3).
-math101_eqs :- prop(math103, completed, 3).
-math101_eqs :- prop(math105, completed, 3).
-math101_eqs :- prop(math121, completed, 3).
+
+% any of these math courses fulfill math101
+math101_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math101], R).
+math101_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math103], R).
+math101_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math105], R).
+math101_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math121], R).
 
 
 % TODO
@@ -198,6 +201,7 @@ math101_eqs :- prop(math121, completed, 3).
 physical_science_req.
 
 % Students without high school Biology 11 or 12 must complete BIOL111. Students with high school Biology 11 or 12 must take 3 credits in any ASTR, ATSC, BIOL, EOSC, or GEOB lecture course.
+% for simplicity we will assume the student took bio 11 or bio 12
 bio_req.
 
 
