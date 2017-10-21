@@ -2,7 +2,6 @@
 
 
 
-
 %% ----------------------------------------------------------------
 %% 						TOP LEVEL REQUIREMENTS 
 %% ----------------------------------------------------------------
@@ -19,11 +18,12 @@ graduated :-
 
 % sub requirements in graduation
 communications_reqs :-
-	prop(A, satisfies_req, communications),
-	prop(B, satisfies_req, communications),
-	prop(A, completed, true),
-	prop(B, completed, true),
+	prop(A, satisfies_req, communications_reqs),
+	prop(B, satisfies_req, communications_reqs),
+	prop(A, completed, 3),
+	prop(B, completed, 3),
 	dif(A,B).
+
 
 %arts requirement
 %All courses in the Faculty of Arts are eligible to fulfill the Arts Requirement.
@@ -37,6 +37,28 @@ arts_helper(Acc, CoursesLookedAt) :-
 	prop(A, completed, X),
 	prop(A, faculty, arts),
 	arts_helper(X + Acc, [A | CoursesLookedAt]).
+
+
+%requirements will act as an accumulator of # Courses s.t. satisfies_arts(Course) = true
+%transcript is an input list of course codes (cpsc312)
+%Result is Transcript - Requirements
+arts_reqs(Transcript) :- 
+	arts2(Transcript, Requirements, Result).
+
+%TODO there needs to be a declaration of prop(course, department, dept) for each course we want to recognize.
+satisfies_arts(Course) :- 
+	prop(Course, faculty, arts).
+
+credits_length(Requirements) :- 
+
+
+
+%arts2 true if all elements of transcript fulfill requirements list
+arts2(T,R,T) :-
+	credits_length(R).
+arts2([H | T], R, L) :- 
+	satisfies_arts(H),
+	arts2(T,[H|R],L).
 
 
 fourth :-
@@ -70,7 +92,7 @@ prop(cpsc312, department, scie).
 prop(cpsc312, satisfies_req, third_and_fourth_cpsc_reqs).
 
 % prop(courseID, satisfies_req, true) is true when courseID satisfies the requirement for satisfies_req
-
+?
 
 
 
