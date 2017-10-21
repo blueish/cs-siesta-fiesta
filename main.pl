@@ -6,22 +6,23 @@
 %% 						TOP LEVEL REQUIREMENTS 
 %% ----------------------------------------------------------------
 % Graduation requirements
-graduated :-
-	communications, % done
-	arts, % joel
-	electives, %sam 
-	first_year_reqs,  %sam  todo
-	second_year_cpsc_reqs,  %sam  done
-	second_year_math_stats_reqs,  %sam done
-	third_and_fourth_cpsc_reqs. % joel done
+%% graduated :-
+%% 	communications, % done
+%% 	arts, % joel
+%% 	electives, %sam 
+%% 	first_year_reqs,  %sam  todo
+%% 	second_year_cpsc_reqs,  %sam  done
+%% 	second_year_math_stats_reqs,  %sam done
+%% 	third_and_fourth_cpsc_reqs. % joel done
+
 
 % try
-% new_graduated([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241]).
+% new_graduated([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112]).
 new_graduated(Transcript) :-
 	first_year_reqs(Transcript, R1),
 	second_year_cpsc_reqs(R1, R2),
 	second_year_math_stats_reqs(R2, R3),
-	third_and_fourth_cpsc_reqs(R3, R4)
+	third_and_fourth_cpsc_reqs(R3, R4),
 	communications_reqs(R4, R5).
 
 
@@ -59,7 +60,7 @@ arts(Transcript, Result) :-
 	pull_arts_course_from_trans(ResultTrans1, ResultCourse2, ResultTrans2),
 	pull_arts_course_from_trans(ResultTrans2, ResultCourse3, ResultTrans3),
 	pull_arts_course_from_trans(ResultTrans3, ResultCourse4, Result),
-	mysub(Transcript,[ResultCourse1,ResultCourse2,ResultCourse3,ResultCourse4],Result).
+	remove_courses_from_transcript(Transcript,[ResultCourse1,ResultCourse2,ResultCourse3,ResultCourse4],Result).
 
 first_year_reqs(Transcript, R3) :-
 	% the two comp scis
@@ -91,7 +92,7 @@ electives :-
 	credits_earned_extra.
 
 breadth_credits :-
-	prop(A, department, C),
+	prop(_, department, C),
 	dif(C, cpsc),
 	dif(C, math),
 	dif(C, stats).
