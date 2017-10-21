@@ -7,12 +7,12 @@
 %% ----------------------------------------------------------------
 % Graduation requirements
 graduated :-
-	communications_reqs,
-	arts_reqs, % joel
-	electives_reqs, %sam 
-	first_year_reqs,  %sam 
-	second_year_cpsc_reqs,  %sam 
-	second_year_math_stats_reqs,  %sam 
+	communications,
+	arts, % joel
+	electives, %sam 
+	first_year_reqs,  %sam  todo
+	second_year_cpsc_reqs,  %sam  done
+	second_year_math_stats_reqs,  %sam done
 	third_and_fourth_cpsc_reqs. % joel
 
 
@@ -66,11 +66,73 @@ fourth :-
 	NumberOfCreditsEarned > 3.
 
 fourth_helper(Acc, CoursesLookedAt) :-
-	member(M, CoursesLookedAt).
+	member(M, CoursesLookedAt),
 	dif(M, A),
 	prop(A, completed, X),
 	three_h_level(A),
 	fourth_helper(X + Acc, [ A | CoursesLookedAt ]). 
+
+first_year_reqs :-
+	prop(cpsc110, completed, 4),
+	prop(cpsc121, completed, 4),
+	math100_eqs,
+	math101_eqs,
+	physical_science_req,
+	bio_req.
+
+% will be true when the final element is a list of courses used to fulfill the req
+
+%% second_year_cpsc_reqs :-
+%% 	prop(cpsc210, completed, 4),
+%% 	prop(cpsc213, completed, 4),
+%% 	prop(cpsc221, completed, 4),
+%% 	prop(math200, completed, 3),
+%% 	prop(math221, completed, 3).
+
+%second_helper(Input, RestNeeded, Final) is true when RestNeeded is the courses needed to fulfill this req, 
+% Final is the courses used to fulfill this req, and Final exists in Input
+%second_helper(Input, [], L) :-
+%	all_are_members_of(L, Input),
+
+
+
+% TODO: change CoursesFulfilled to be the inverse, e.g. the courses minus cpsc210
+second_year_cpsc_reqs(Transcript, CoursesFulfilled) :- 
+	second_year_helper_v2(Transcript, [ cpsc210, cpsc213, cpsc221, math200, math221 ], CoursesFulfilled).
+
+% second year helper(Transcript, CourseRequirements, CoursesFulfilled)
+% is true if and only if CourseRequirements is a subset of Transcript, and is in CoursesFulfilled
+second_year_helper_v2(Transcript, [], CoursesFulfilled).
+
+% when the heads match
+second_year_helper_v2(Transcript, [H | T] , [ H | CoursesFulfilled ]) :-
+	member(H, Transcript),
+	second_year_helper_v2(Transcript, T, CoursesFulfilled).
+	
+
+
+% two options: STAT200 & MATH/STAT 302, or STAT241 and 1 extra elective (can count all credits)
+second_year_math_stats_reqs :-
+	prop(stat200, completed, 3),
+	prop(math302, completed, 3).
+
+second_year_math_stats_reqs :-
+	prop(stat200, completed, 3),
+	prop(stat302, completed, 3).
+
+second_year_math_stats_reqs :-
+	prop(stat241, completed, 4).
+
+
+electives :-
+	breadth_credits.
+	credits_earned_extra.
+
+breadth_credits :-
+	prop(A, department, C),
+	dif(C, cpsc),
+	dif(C, math),
+	dif(C, stats).
 	
 
 %% ----------------------------------------------------------------
@@ -116,6 +178,30 @@ prop(astu150, satisfies_req, communications).
 prop(wrds150, satisfies_req, communications). 
 
 
+% First Year requirements helpers
+
+math100_eqs :- prop(math100, completed, 3).
+math100_eqs :- prop(math102, completed, 3).
+math100_eqs :- prop(math104, completed, 3).
+math100_eqs :- prop(math110, completed, 3).
+math100_eqs :- prop(math111, completed, 3).
+math100_eqs :- prop(math120, completed, 3).
+math100_eqs :- prop(math180, completed, 3).
+math100_eqs :- prop(math184, completed, 3).
+
+math101_eqs :- prop(math101, completed, 3).
+math101_eqs :- prop(math103, completed, 3).
+math101_eqs :- prop(math105, completed, 3).
+math101_eqs :- prop(math121, completed, 3).
+
+
+% TODO
+% physical science req
+% 100-Level CHEM or PHYS courses. PHYS100 and CHEM111 do not count for this requirement. Students without high school Chemistry 12 must also take CHEM111. Students without high school Physics 12 must also take PHYS100.
+physical_science_req.
+
+% Students without high school Biology 11 or 12 must complete BIOL111. Students with high school Biology 11 or 12 must take 3 credits in any ASTR, ATSC, BIOL, EOSC, or GEOB lecture course.
+bio_req.
 
 
 
