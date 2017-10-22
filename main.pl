@@ -23,7 +23,8 @@ new_graduated(Transcript) :-
 	second_year_cpsc_reqs(R1, R2),
 	second_year_math_stats_reqs(R2, R3),
 	third_and_fourth_cpsc_reqs(R3, R4),
-	communications_reqs(R4, R5).
+	communications_reqs(R4, R5),
+	electives(R5, _).
 
 
 
@@ -81,15 +82,24 @@ second_year_math_stats_reqs(Transcript, RestOfTranscript) :-
 
 
 
-electives :-
-	breadth_credits.
+electives(Transcript, R) :-
+	breadth_credits(Transcript, R1).
 	credits_earned_extra.
 
-breadth_credits :-
-	prop(_, department, C),
-	dif(C, cpsc),
-	dif(C, math),
-	dif(C, stats).
+breadth_credits(Transcript, R) :-
+	prop(A, department, C1),
+	prop(B, department, C1),
+	prop(C, department, C1),
+	dif(C1, cpsc),
+	dif(C1, math),
+	dif(C1, stats),
+	dif(C2, cpsc),
+	dif(C2, math),
+	dif(C2, stats),
+	dif(C3, cpsc),
+	dif(C3, math),
+	dif(C3, stats),
+	remove_courses_from_transcript(Transcript, [ A, B, C ], R).
 	
 
 %% ----------------------------------------------------------------
