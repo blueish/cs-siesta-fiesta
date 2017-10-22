@@ -17,16 +17,23 @@
 
 
 % try
-% new_graduated([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112]).
-new_graduated(Transcript) :-
+% new_graduated([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112], First_Year_Courses, Second_Year_CPSC_Courses, Second_Year_MATH_STAT_Courses, Third_Fourth_Year_CPSC_Courses).
+new_graduated(Transcript, First_Year_Courses, Second_Year_CPSC_Courses, Second_Year_MATH_STAT_Courses, Third_Fourth_Year_CPSC_Courses) :-
 	first_year_reqs(Transcript, R1),
+	courses_removed_from_transcript(Transcript, First_Year_Courses, R1),
 	second_year_cpsc_reqs(R1, R2),
+	courses_removed_from_transcript(R1, Second_Year_CPSC_Courses, R2),
 	second_year_math_stats_reqs(R2, R3),
+	courses_removed_from_transcript(R2, Second_Year_MATH_STAT_Courses, R3),
 	third_and_fourth_cpsc_reqs(R3, R4),
-	communications_reqs(R4, R5),
-	electives(R5, _).
+	courses_removed_from_transcript(R3, Third_Fourth_Year_CPSC_Courses, R4),
+	communications_reqs(R4, R5).%,
+%	courses_removed_from_transcript(R4, Communications_Courses, R5),
+%	electives(R5, R6),
+%	courses_removed_from_transcript(R5, Second_Year_CPSC_Courses, R6),.
 
-
+%sample query
+% new_graduated([cpsc110,engl112,math100,phys111,psyc100,cpsc111,cpsc103,engl153,math101,phys102,math221,phil220,fist100,cpsc221,cpsc210,cpsc213,stat200,phil120,math200,cpsc100,chem121,biol111,cpsc322,cpsc344,cpsc310,cpsc312,cpsc314,cpsc320,psyc314,cpsc422,cpsc430,crwr230,cpsc312,cpsc340,musc323,stat302,adhe327,cogs200,cpsc444,musc326A]).
 
 %arts requirement
 %All courses in the Faculty of Arts are eligible to fulfill the Arts Requirement.
@@ -37,14 +44,10 @@ new_graduated(Transcript) :-
 %arts_reqs(Transcript, Result) :- 
 %	arts2(Transcript, Requirements, Result).
 
-%TODO there needs to be a declaration of prop(course, department, dept) for each course we want to recognize.
-satisfies_arts(Course) :- 
-	prop(Course, faculty, arts).
-
 
 %pull_arts_course_from_trans is true when ResultTrans is Transcript - ResultCourse where ResultCourse is faculty of arts
 pull_arts_course_from_trans(Transcript, ResultCourse, ResultTrans) :-
-	satisfies_arts(ResultCourse),
+	prop(ResultCourse, faculty, arts),
 	member(ResultCourse, Transcript),
 	select(ResultCourse, Transcript, ResultTrans).
 
@@ -111,6 +114,11 @@ remove_courses_from_transcript(R, [], R).
 remove_courses_from_transcript(Transcript, [ Acourse | RestRequired ], X) :-
 	select(Acourse, Transcript, DeleteResult),
 	remove_courses_from_transcript(DeleteResult, RestRequired, X).
+
+%courses_removed_from_transcript(A,B,C) is true when B = A - C.
+courses_removed_from_transcript(Transcript, [], Transcript).
+courses_removed_from_transcript(Transcript, CoursesUsed, ResultTrans) :- 
+	subtract(Transcript, ResultTrans, CoursesUsed).
 
 
 %% ----------------------------------------------------------------
