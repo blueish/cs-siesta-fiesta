@@ -18,14 +18,13 @@
 
 % try
 % new_graduated([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112]).
-new_graduated(Transcript) :-
+new_graduated(Transcript, R1, R2, R3, R4, R5, CoursesNotUsed) :-
 	first_year_reqs(Transcript, R1),
 	second_year_cpsc_reqs(R1, R2),
 	second_year_math_stats_reqs(R2, R3),
 	third_and_fourth_cpsc_reqs(R3, R4),
 	communications_reqs(R4, R5),
-	electives(R5, _).
-
+	electives(R5, CoursesNotUsed).
 
 
 %arts requirement
@@ -82,25 +81,33 @@ second_year_math_stats_reqs(Transcript, RestOfTranscript) :-
 
 
 
-electives(Transcript, R) :-
+electives(Transcript, R2) :-
 	breadth_credits(Transcript, R1).
-	credits_earned_extra.
+	credits_earned_extra(R1, R2).
 
-breadth_credits(Transcript, R) :-
-	prop(A, department, C1),
-	prop(B, department, C1),
-	prop(C, department, C1),
-	dif(C1, cpsc),
-	dif(C1, math),
-	dif(C1, stats),
-	dif(C2, cpsc),
-	dif(C2, math),
-	dif(C2, stats),
-	dif(C3, cpsc),
-	dif(C3, math),
-	dif(C3, stats),
-	remove_courses_from_transcript(Transcript, [ A, B, C ], R).
+breadth_credits(Transcript, R3) :-
+	pull_breadth_course(Transcript, _, R1),
+	pull_breadth_course(R1,         _, R2),
+	pull_breadth_course(R2,         _, R3).
+
+pull_breadth_course(Transcript, C, R) :-
+	prop(C, department, D),
+	dif(D, cpsc),
+	dif(D, math),
+	dif(D, stats),
+	select(C, Transcript, R).
 	
+credits_earned_extra(Transcript, Result) :-
+	pull_any_course(Transcript,   _, ResultTrans1),
+	pull_any_course(ResultTrans1, _, ResultTrans2),
+	pull_any_course(ResultTrans2, _, ResultTrans3),
+	pull_any_course(ResultTrans3, _, ResultTrans4),
+	pull_any_course(ResultTrans4, _, ResultTrans5),
+	pull_any_course(ResultTrans5, _, Result).
+
+pull_any_course(Transcript, Course, Result) :-
+	select(Course, Transcript, Result).
+
 
 %% ----------------------------------------------------------------
 %% 						HELPER METHODS
@@ -367,6 +374,8 @@ prop(cpsc490,department,cpsc).
 
 % ARTS DECLARATIONS
 %Note: for simplicity, arts course declarations will be limited to a reasonable number to satisfy the query
+prop(engl100 ,number, 100).
+prop(engl100 ,department, engl).
 
 prop(engl112 ,number,112).
 prop(engl112 ,department, engl).
@@ -394,7 +403,6 @@ prop(crwr230 ,department,crwr ).
 
 prop(phil321 ,number,321).
 prop(phil321 ,department,321).
-
 
 
 
