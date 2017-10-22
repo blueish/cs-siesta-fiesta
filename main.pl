@@ -40,12 +40,6 @@ new_graduated(Transcript) :-
 satisfies_arts(Course) :- 
 	prop(Course, faculty, arts).
 
-%sampling of arts courses for testing
-prop(psyc100,department,psyc).
-prop(psyc101,department,psyc).
-prop(crwr230,department,crwr).
-prop(phil120,department,phil).
-
 
 %pull_arts_course_from_trans is true when ResultTrans is Transcript - ResultCourse where ResultCourse is faculty of arts
 pull_arts_course_from_trans(Transcript, ResultCourse, ResultTrans) :-
@@ -360,6 +354,41 @@ prop(cpsc449,department,cpsc).
 
 prop(cpsc490,number,490).
 prop(cpsc490,department,cpsc).
+
+% ARTS DECLARATIONS
+%Note: for simplicity, arts course declarations will be limited to a reasonable number to satisfy the query
+
+prop(engl112 ,number,112).
+prop(engl112 ,department, engl).
+
+prop(psyc100,number,100).
+prop(psyc100,department,psyc).
+
+prop(psyc101,number,101).
+prop(psyc101,department,psyc).
+
+prop(phil120 ,number,120).
+prop(phil120 ,department, phil).
+
+prop(phil220 ,number,220).
+prop(phil220 ,department, phil).
+
+prop(engl153 ,number,153).
+prop(engl153 ,department, engl).
+
+prop(psyc314 ,number,314).
+prop(psyc314 ,department, psyc).
+
+prop(crwr230 ,number,230).
+prop(crwr230 ,department,crwr ).
+
+prop(phil321 ,number,321).
+prop(phil321 ,department,321).
+
+
+
+
+
 
 
 %% ----------------------------------------------------------------
