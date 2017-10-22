@@ -14,11 +14,14 @@
 %% 	second_year_cpsc_reqs,  %sam  done
 %% 	second_year_math_stats_reqs,  %sam done
 %% 	third_and_fourth_cpsc_reqs. % joel done
+% transcriptA = [cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230].
 
 
+graduated(Transcript, NotUsed) :-
+	new_graduated(Transcript, _, _, _, _, _, NotUsed).
 % try
-% new_graduated([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112], First_Year_Courses, Second_Year_CPSC_Courses, Second_Year_MATH_STAT_Courses, Third_Fourth_Year_CPSC_Courses).
-new_graduated(Transcript, First_Year_Courses, Second_Year_CPSC_Courses, Second_Year_MATH_STAT_Courses, Third_Fourth_Year_CPSC_Courses) :-
+% new_graduated([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112], First_Year_Courses, Second_Year_CPSC_Courses, Second_Year_MATH_STAT_Courses, Third_Fourth_Year_CPSC_Courses,Communications_Courses,Electives).
+new_graduated(Transcript, First_Year_Courses, Second_Year_CPSC_Courses, Second_Year_MATH_STAT_Courses, Third_Fourth_Year_CPSC_Courses, Communications_Courses,Electives) :-
 	first_year_reqs(Transcript, R1),
 	courses_removed_from_transcript(Transcript, First_Year_Courses, R1),
 	second_year_cpsc_reqs(R1, R2),
@@ -27,23 +30,48 @@ new_graduated(Transcript, First_Year_Courses, Second_Year_CPSC_Courses, Second_Y
 	courses_removed_from_transcript(R2, Second_Year_MATH_STAT_Courses, R3),
 	third_and_fourth_cpsc_reqs(R3, R4),
 	courses_removed_from_transcript(R3, Third_Fourth_Year_CPSC_Courses, R4),
-	communications_reqs(R4, R5).%,
-%	courses_removed_from_transcript(R4, Communications_Courses, R5),
-%	electives(R5, R6),
-%	courses_removed_from_transcript(R5, Second_Year_CPSC_Courses, R6),.
+	communications_reqs(R4, R5),
+	courses_removed_from_transcript(R4, Communications_Courses, R5),
+	electives(R5, R6),
+	courses_removed_from_transcript(R5, Electives, R6).
 
-%sample query
-% new_graduated([cpsc110,engl112,math100,phys111,psyc100,cpsc111,cpsc103,engl153,math101,phys102,math221,phil220,fist100,cpsc221,cpsc210,cpsc213,stat200,phil120,math200,cpsc100,chem121,biol111,cpsc322,cpsc344,cpsc310,cpsc312,cpsc314,cpsc320,psyc314,cpsc422,cpsc430,crwr230,cpsc312,cpsc340,musc323,stat302,adhe327,cogs200,cpsc444,musc326A]).
+
+% nlp:
+
+% lets try the simple case, we only want to be able to ask:
+% can I graduate
+% am i finished with first year
+% am i finished with second year
+% am i finished with electives requirements
+% am i finished with communications requirements
+% am i finished with math requirements
+% am i finished with upper year courses
+
+
+% try the following
+% question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [can,i,graduate], R).
+%  question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [am, i, finished, with, communications, requirements], R).
+%  question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [am, i, finished, with, second, year], R).
+
+question(Transcript, [can, i, graduate], [yes]) :- graduated(Transcript, _).
+
+question(Transcript, [am, i, finished,with | QTail], [yes]) :-
+	requirements_noun(QTail, Transcript).
+
+requirements_noun([first_year_reqs, year], Transcript) :- first_year_reqs(Transcript, _).
+
+requirements_noun([second, year], Transcript) :- second_year_cpsc_reqs(R1, _).
+
+requirements_noun([communications, requirements], Transcript) :- communications_reqs(Transcript, _).
+
+requirements_noun([math, requirements], Transcript) :- second_year_math_stats_reqs(Transcript, _).
+
+requirements_noun([upper, year, courses], Transcript) :- third_and_fourth_cpsc_reqs(Transcript, _).
+
+requirements_noun([electives, _], Transcript) :- first_year_reqs(Transcript, _).
 
 %arts requirement
 %All courses in the Faculty of Arts are eligible to fulfill the Arts Requirement.
-
-%requirements will act as an accumulator of # Course where satisfies_arts(Course) = true
-%transcript is an input list of course codes (cpsc312)
-%Result is Transcript - Requirements
-%arts_reqs(Transcript, Result) :- 
-%	arts2(Transcript, Requirements, Result).
-
 
 %pull_arts_course_from_trans is true when ResultTrans is Transcript - ResultCourse where ResultCourse is faculty of arts
 pull_arts_course_from_trans(Transcript, ResultCourse, ResultTrans) :-
@@ -85,25 +113,33 @@ second_year_math_stats_reqs(Transcript, RestOfTranscript) :-
 
 
 
-electives(Transcript, R) :-
+electives(Transcript, R2) :-
 	breadth_credits(Transcript, R1).
-	credits_earned_extra.
+	credits_earned_extra(R1, R2).
 
-breadth_credits(Transcript, R) :-
-	prop(A, department, C1),
-	prop(B, department, C1),
-	prop(C, department, C1),
-	dif(C1, cpsc),
-	dif(C1, math),
-	dif(C1, stats),
-	dif(C2, cpsc),
-	dif(C2, math),
-	dif(C2, stats),
-	dif(C3, cpsc),
-	dif(C3, math),
-	dif(C3, stats),
-	remove_courses_from_transcript(Transcript, [ A, B, C ], R).
+breadth_credits(Transcript, R3) :-
+	pull_breadth_course(Transcript, _, R1),
+	pull_breadth_course(R1,         _, R2),
+	pull_breadth_course(R2,         _, R3).
+
+pull_breadth_course(Transcript, C, R) :-
+	prop(C, department, D),
+	dif(D, cpsc),
+	dif(D, math),
+	dif(D, stats),
+	select(C, Transcript, R).
 	
+credits_earned_extra(Transcript, Result) :-
+	pull_any_course(Transcript,   _, ResultTrans1),
+	pull_any_course(ResultTrans1, _, ResultTrans2),
+	pull_any_course(ResultTrans2, _, ResultTrans3),
+	pull_any_course(ResultTrans3, _, ResultTrans4),
+	pull_any_course(ResultTrans4, _, ResultTrans5),
+	pull_any_course(ResultTrans5, _, Result).
+
+pull_any_course(Transcript, Course, Result) :-
+	select(Course, Transcript, Result).
+
 
 %% ----------------------------------------------------------------
 %% 						HELPER METHODS
@@ -375,6 +411,8 @@ prop(cpsc490,department,cpsc).
 
 % ARTS DECLARATIONS
 %Note: for simplicity, arts course declarations will be limited to a reasonable number to satisfy the query
+prop(engl100 ,number, 100).
+prop(engl100 ,department, engl).
 
 prop(engl112 ,number,112).
 prop(engl112 ,department, engl).
@@ -402,7 +440,6 @@ prop(crwr230 ,department,crwr ).
 
 prop(phil321 ,number,321).
 prop(phil321 ,department,321).
-
 
 
 
