@@ -14,10 +14,13 @@
 %% 	second_year_cpsc_reqs,  %sam  done
 %% 	second_year_math_stats_reqs,  %sam done
 %% 	third_and_fourth_cpsc_reqs. % joel done
-
+% transcriptA = [cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230].
 
 % try
 % new_graduated([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112]).
+graduated(Transcript, NotUsed) :-
+	new_graduated(Transcript, _, _, _, _, _, NotUsed).
+
 new_graduated(Transcript, R1, R2, R3, R4, R5, CoursesNotUsed) :-
 	first_year_reqs(Transcript, R1),
 	second_year_cpsc_reqs(R1, R2),
@@ -26,6 +29,39 @@ new_graduated(Transcript, R1, R2, R3, R4, R5, CoursesNotUsed) :-
 	communications_reqs(R4, R5),
 	electives(R5, CoursesNotUsed).
 
+% nlp:
+
+% lets try the simple case, we only want to be able to ask:
+% can I graduate
+% am i finished with first year
+% am i finished with second year
+% am i finished with electives requirements
+% am i finished with communications requirements
+% am i finished with math requirements
+% am i finished with upper year courses
+
+
+% try the following
+% question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [can,i,graduate], R).
+%  question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [am, i, finished, with, communications, requirements], R).
+%  question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [am, i, finished, with, second, year], R).
+
+question(Transcript, [can, i, graduate], [yes]) :- graduated(Transcript, _).
+
+question(Transcript, [am, i, finished,with | QTail], [yes]) :-
+	requirements_noun(QTail, Transcript).
+
+requirements_noun([first_year_reqs, year], Transcript) :- first_year_reqs(Transcript, _).
+
+requirements_noun([second, year], Transcript) :- second_year_cpsc_reqs(R1, _).
+
+requirements_noun([communications, requirements], Transcript) :- communications_reqs(Transcript, _).
+
+requirements_noun([math, requirements], Transcript) :- second_year_math_stats_reqs(Transcript, _).
+
+requirements_noun([upper, year, courses], Transcript) :- third_and_fourth_cpsc_reqs(Transcript, _).
+
+requirements_noun([electives, _], Transcript) :- first_year_reqs(Transcript, _).
 
 %arts requirement
 %All courses in the Faculty of Arts are eligible to fulfill the Arts Requirement.
