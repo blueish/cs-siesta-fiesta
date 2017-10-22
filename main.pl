@@ -1,7 +1,3 @@
-
-
-
-
 %% ----------------------------------------------------------------
 %% 						TOP LEVEL REQUIREMENTS 
 %% ----------------------------------------------------------------
@@ -38,50 +34,6 @@ new_graduated(Transcript, First_Year_Courses, Second_Year_CPSC_Courses, Second_Y
 	courses_removed_from_transcript(R5, Electives, R6).
 
 
-% nlp:
-
-% lets try the simple case, we only want to be able to ask:
-% can I graduate
-% am i finished with first year
-% am i finished with second year
-% am i finished with electives requirements
-% am i finished with communications requirements
-% am i finished with math requirements
-% am i finished with upper year courses
-
-
-% try the following
-% question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [can,i,graduate], R).
-%  question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [am, i, finished, with, communications, requirements], R).
-%  question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [am, i, finished, with, second, year], R).
-
-question(Transcript, [can, i, graduate], [yes]) :- graduated(Transcript, _).
-
-question(Transcript, [am, i, finished,with | QTail], [yes]) :-
-	requirements_noun(QTail, Transcript).
-
-requirements_noun([first_year_reqs, year], Transcript) :- first_year_reqs(Transcript, _).
-
-requirements_noun([second, year], Transcript) :- second_year_cpsc_reqs(R1, _).
-
-requirements_noun([communications, requirements], Transcript) :- communications_reqs(Transcript, _).
-
-requirements_noun([math, requirements], Transcript) :- second_year_math_stats_reqs(Transcript, _).
-
-requirements_noun([upper, year, courses], Transcript) :- third_and_fourth_cpsc_reqs(Transcript, _).
-
-requirements_noun([electives, _], Transcript) :- first_year_reqs(Transcript, _).
-
-%arts requirement
-%All courses in the Faculty of Arts are eligible to fulfill the Arts Requirement.
-
-%pull_arts_course_from_trans is true when ResultTrans is Transcript - ResultCourse where ResultCourse is faculty of arts
-pull_arts_course_from_trans(Transcript, ResultCourse, ResultTrans) :-
-	prop(ResultCourse, faculty, arts),
-	member(ResultCourse, Transcript),
-	select(ResultCourse, Transcript, ResultTrans).
-
-
 %arts is true when Result is Transcript - (4 courses that satisfy arts reqs)
 arts(Transcript, Result) :-
 	pull_arts_course_from_trans(Transcript, ResultCourse1, ResultTrans1),
@@ -103,21 +55,62 @@ second_year_cpsc_reqs(Transcript, RestOfTranscript) :-
 	remove_courses_from_transcript(Transcript, [ cpsc210, cpsc213, cpsc221, math200, math221 ], RestOfTranscript).
 
 
-
 % two options: STAT200 & MATH/STAT 302, or STAT241 and 1 extra elective (can count all credits)
 % second_year_math_stats_reqs(T, R) is true when R is T minus the required math/stats courses 
-second_year_math_stats_reqs(Transcript, RestOfTranscript) :-
-	remove_courses_from_transcript( Transcript, [ stat200, math302 ], RestOfTranscript).
-second_year_math_stats_reqs(Transcript, RestOfTranscript) :-
-	remove_courses_from_transcript( Transcript, [ stat200, stat302 ], RestOfTranscript).
-second_year_math_stats_reqs(Transcript, RestOfTranscript) :-
-	remove_courses_from_transcript( Transcript, [ stat241 ], RestOfTranscript).
-
-
+second_year_math_stats_reqs(Transcript, RestOfTranscript) :- remove_courses_from_transcript( Transcript, [ stat200, math302 ], RestOfTranscript).
+second_year_math_stats_reqs(Transcript, RestOfTranscript) :- remove_courses_from_transcript( Transcript, [ stat200, stat302 ], RestOfTranscript).
+second_year_math_stats_reqs(Transcript, RestOfTranscript) :- remove_courses_from_transcript( Transcript, [ stat241 ], RestOfTranscript).
 
 electives(Transcript, R2) :-
 	breadth_credits(Transcript, R1).
 	credits_earned_extra(R1, R2).
+
+
+%% ----------------------------------------------------------------
+%% 						NLP
+%% ----------------------------------------------------------------
+
+% lets try the simple case, we only want to be able to ask:
+% can I graduate
+% am i finished with first year
+% am i finished with second year
+% am i finished with communications requirements
+% am i finished with math requirements
+% am i finished with upper year courses
+
+% NLP 
+
+% try the following
+% question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [can,i,graduate], R).
+%  question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [am, i, finished, with, communications, requirements], R).
+%  question([cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230], [am, i, finished, with, second, year], R).
+
+question(Transcript, [can, i, graduate], [yes]) :- graduated(Transcript, _).
+
+question(Transcript, [am, i, finished,with | QTail], [yes]) :-
+	requirements_noun(QTail, Transcript).
+
+requirements_noun([first_year_reqs, year],        Transcript) :- first_year_reqs(Transcript, _).
+requirements_noun([second, year],                 Transcript) :- second_year_cpsc_reqs(Transcript, _).
+requirements_noun([communications, requirements], Transcript) :- communications_reqs(Transcript, _).
+requirements_noun([math, requirements],           Transcript) :- second_year_math_stats_reqs(Transcript, _).
+requirements_noun([upper, year, courses],         Transcript) :- third_and_fourth_cpsc_reqs(Transcript, _).
+
+%% ----------------------------------------------------------------
+%% 						HELPER METHODS
+%% ----------------------------------------------------------------
+
+% remove_courses_from_transcript(T, C, R) is true when C is a subset of T and R is T - C (set difference)
+remove_courses_from_transcript(R, [], R).
+remove_courses_from_transcript(Transcript, [ Acourse | RestRequired ], X) :-
+	select(Acourse, Transcript, DeleteResult),
+	remove_courses_from_transcript(DeleteResult, RestRequired, X).
+
+%courses_removed_from_transcript(A,B,C) is true when B = A - C.
+courses_removed_from_transcript(Transcript, [], Transcript).
+courses_removed_from_transcript(Transcript, CoursesUsed, ResultTrans) :- 
+	subtract(Transcript, ResultTrans, CoursesUsed).
+
 
 breadth_credits(Transcript, R3) :-
 	pull_breadth_course(Transcript, _, R1),
@@ -142,21 +135,14 @@ credits_earned_extra(Transcript, Result) :-
 pull_any_course(Transcript, Course, Result) :-
 	select(Course, Transcript, Result).
 
+%arts requirement
+%All courses in the Faculty of Arts are eligible to fulfill the Arts Requirement.
 
-%% ----------------------------------------------------------------
-%% 						HELPER METHODS
-%% ----------------------------------------------------------------
-
-% remove_courses_from_transcript(T, C, R) is true when C is a subset of T and R is T - C (set difference)
-remove_courses_from_transcript(R, [], R).
-remove_courses_from_transcript(Transcript, [ Acourse | RestRequired ], X) :-
-	select(Acourse, Transcript, DeleteResult),
-	remove_courses_from_transcript(DeleteResult, RestRequired, X).
-
-%courses_removed_from_transcript(A,B,C) is true when B = A - C.
-courses_removed_from_transcript(Transcript, [], Transcript).
-courses_removed_from_transcript(Transcript, CoursesUsed, ResultTrans) :- 
-	subtract(Transcript, ResultTrans, CoursesUsed).
+%pull_arts_course_from_trans is true when ResultTrans is Transcript - ResultCourse where ResultCourse is faculty of arts
+pull_arts_course_from_trans(Transcript, ResultCourse, ResultTrans) :-
+	prop(ResultCourse, faculty, arts),
+	member(ResultCourse, Transcript),
+	select(ResultCourse, Transcript, ResultTrans).
 
 
 %% ----------------------------------------------------------------
