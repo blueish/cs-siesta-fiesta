@@ -42,13 +42,13 @@ arts(Transcript, Result) :-
 	pull_arts_course_from_trans(ResultTrans3, ResultCourse4, Result),
 	remove_courses_from_transcript(Transcript,[ResultCourse1,ResultCourse2,ResultCourse3,ResultCourse4],Result).
 
-first_year_reqs(Transcript, R3) :-
+first_year_reqs(Transcript, R5) :-
 	% the two comp scis
 	remove_courses_from_transcript(Transcript, [ cpsc110, cpsc121 ], R1),
 	math100_eqs(R1, R2),
 	math101_eqs(R2, R3),
-	physical_science_req,
-	bio_req.
+	physical_science_req(R3,R4),
+	bio_req(R4,R5).
 
 
 second_year_cpsc_reqs(Transcript, RestOfTranscript) :- 
@@ -209,11 +209,48 @@ math101_eqs(Transcript, R) :- remove_courses_from_transcript(Transcript, [math12
 % TODO
 % physical science req
 % 100-Level CHEM or PHYS courses. PHYS100 and CHEM111 do not count for this requirement. Students without high school Chemistry 12 must also take CHEM111. Students without high school Physics 12 must also take PHYS100.
-physical_science_req.
+physical_science_req(Transcript,R2) :-
+	pull_phys_scie_req(Transcript, _, R1),
+	pull_phys_scie_req(R1, _, R2).
+
+pull_phys_scie_req(Transcript, Course, Result) :-
+	prop(Course,department,phys),
+	prop(Course,number,Num),
+	Num < 200,
+	Num \= 100,
+	select(Course,Transcript,Result).
+
+pull_phys_scie_req(Transcript, Course, Result) :-
+	prop(Course,department,chem),
+	prop(Course,number,Num),
+	Num < 200,
+	Num \= 111,
+	select(Course,Transcript,Result).
+
 
 % Students without high school Biology 11 or 12 must complete BIOL111. Students with high school Biology 11 or 12 must take 3 credits in any ASTR, ATSC, BIOL, EOSC, or GEOB lecture course.
-% for simplicity we will assume the student took bio 11 or bio 12
-bio_req.
+bio_req(Transcript,R) :- remove_courses_from_transcript(Transcript, [biol111], R).
+bio_req(Transcript,R) :- pull_bio_req(Transcript, _, R).
+
+pull_bio_req(Transcript, Course, R) :-
+	prop(Course,department,astr),
+	select(Course,Transcript,R).
+
+pull_bio_req(Transcript, Course, R) :-
+	prop(Course,department,atsc),
+	select(Course,Transcript,R).
+	
+pull_bio_req(Transcript, Course, R) :-
+	prop(Course,department,biol),
+	select(Course,Transcript,R).
+
+pull_bio_req(Transcript, Course, R) :-
+	prop(Course,department,eosc),
+	select(Course,Transcript,R).
+
+pull_bio_req(Transcript, Course, R) :-
+	prop(Course,department,geob),
+	select(Course,Transcript,R).
 
 
 %% --------------- THIRD AND FOURTH REQS
