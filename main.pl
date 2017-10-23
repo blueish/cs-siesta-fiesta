@@ -18,7 +18,7 @@
 %new_graduated([engl100,engl110,phil120,phil220,psyc101,psyc102,cpsc110,cpsc121,math100,math101,phys101,chem101,biol111,cpsc210,cpsc213,cpsc221,math200,math221,stat200,stat302,cpsc310,cpsc313,cpsc320,cpsc312,cpsc314,cpsc322,cpsc422,cpsc430,cpsc444,crwr230,psyc314,phil321,cpsc344,cpsc317,cpsc304,cpsc404,cpsc421,cpsc420,cpsc303,cpsc302],Arts_Courses, First_Year_Courses, Second_Year_CPSC_Courses, Second_Year_MATH_STAT_Courses, Third_Fourth_Year_CPSC_Courses, Communications_Courses,Electives).
 
 graduated(Transcript, NotUsed) :-
-	new_graduated(Transcript, _, _, _, _, _, NotUsed).
+	new_graduated(Transcript, _, _, _, _, _, _, NotUsed).
 % try
 % 
 new_graduated(Transcript, Arts_Courses, First_Year_Courses, Second_Year_CPSC_Courses, Second_Year_MATH_STAT_Courses, Third_Fourth_Year_CPSC_Courses, Communications_Courses,Electives) :-
