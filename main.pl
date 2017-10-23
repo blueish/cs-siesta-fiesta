@@ -464,7 +464,67 @@ prop(crwr230 ,number,230).
 prop(crwr230 ,department,crwr ).
 
 prop(phil321 ,number,321).
-prop(phil321 ,department,321).
+prop(phil321 ,department,phil).
+
+% CHEM AND PHYS 100 levels (and bio 111)
+
+prop(biol111, number, 111).
+prop(biol111, department, biol).
+
+prop(phys100, number, 100).
+prop(phys100, department, phys).
+
+prop(phys101, number, 101).
+prop(phys100, department, phys).
+
+prop(phys107, number, 107).
+prop(phys107, department, phys).
+
+prop(phys108, number, 108).
+prop(phys108, department, phys).
+
+prop(phys109, number, 109).
+prop(phys109, department, phys).
+
+prop(phys117, number, 117).
+prop(phys117, department, phys).
+
+prop(phys118, number, 118).
+prop(phys118, department, phys).
+
+prop(phys119, number, 119).
+prop(phys119, department, phys).
+
+prop(phys157, number, 157).
+prop(phys157, department, phys).
+
+prop(phys158, number, 158).
+prop(phys158, department, phys).
+
+prop(phys159, number, 159).
+prop(phys159, department, phys).
+
+prop(phys170, number, 170).
+prop(phys170, department, phys).
+
+
+prop(chem111, number, 111).
+prop(chem111, department, chem).
+
+prop(chem121, number, 121).
+prop(chem121, department, chem).
+
+prop(chem123, number, 123).
+prop(chem123, department, chem).
+
+prop(chem154, number, 154).
+prop(chem154, department, chem).
+
+
+
+
+
+
 
 
 
