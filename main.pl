@@ -13,25 +13,29 @@
 
 
 % transcriptA = [cpsc110, cpsc121, math100, math101, cpsc210, cpsc213, cpsc221, math200, math221, stat241,  cpsc310, cpsc313, cpsc320, cpsc311, cpsc312, cpsc317, cpsc420, cpsc410, cpsc420, stats241, engl100, engl112, phil220, engl153, crwr230].
-% completetranscript: [engl100,engl110,phil120,phil220,psyc101,psyc102,cpsc110,cpsc121,math100,math101,phys101,chem101]
+% completetranscript: [engl100,engl110,phil120,phil220,psyc101,psyc102,cpsc110,cpsc121,math100,math101,phys101,chem101,biol111,cpsc210,cpsc213,cpsc221,math200,math221,stat200,stat302,cpsc310,cpsc313,cpsc320,cpsc312,cpsc314,cpsc322,cpsc422,cpsc430,cpsc444,crwr230,psyc314,phil321,cpsc344,cpsc317,cpsc304,cpsc404,cpsc421,cpsc420,cpsc303,cpsc302]
+%try
+%new_graduated([engl100,engl110,phil120,phil220,psyc101,psyc102,cpsc110,cpsc121,math100,math101,phys101,chem101,biol111,cpsc210,cpsc213,cpsc221,math200,math221,stat200,stat302,cpsc310,cpsc313,cpsc320,cpsc312,cpsc314,cpsc322,cpsc422,cpsc430,cpsc444,crwr230,psyc314,phil321,cpsc344,cpsc317,cpsc304,cpsc404,cpsc421,cpsc420,cpsc303,cpsc302],Arts_Courses, First_Year_Courses, Second_Year_CPSC_Courses, Second_Year_MATH_STAT_Courses, Third_Fourth_Year_CPSC_Courses, Communications_Courses,Electives).
 
 graduated(Transcript, NotUsed) :-
 	new_graduated(Transcript, _, _, _, _, _, NotUsed).
 % try
 % 
-new_graduated(Transcript, First_Year_Courses, Second_Year_CPSC_Courses, Second_Year_MATH_STAT_Courses, Third_Fourth_Year_CPSC_Courses, Communications_Courses,Electives) :-
-	first_year_reqs(Transcript, R1),
-	courses_removed_from_transcript(Transcript, First_Year_Courses, R1),
-	second_year_cpsc_reqs(R1, R2),
-	courses_removed_from_transcript(R1, Second_Year_CPSC_Courses, R2),
-	second_year_math_stats_reqs(R2, R3),
-	courses_removed_from_transcript(R2, Second_Year_MATH_STAT_Courses, R3),
-	third_and_fourth_cpsc_reqs(R3, R4),
-	courses_removed_from_transcript(R3, Third_Fourth_Year_CPSC_Courses, R4),
-	communications_reqs(R4, R5),
-	courses_removed_from_transcript(R4, Communications_Courses, R5),
-	electives(R5, R6),
-	courses_removed_from_transcript(R5, Electives, R6).
+new_graduated(Transcript, Arts_Courses, First_Year_Courses, Second_Year_CPSC_Courses, Second_Year_MATH_STAT_Courses, Third_Fourth_Year_CPSC_Courses, Communications_Courses,Electives) :-
+	arts(Transcript,R1),
+	courses_removed_from_transcript(Transcript, Arts_Courses, R1),
+	first_year_reqs(R1, R2),
+	courses_removed_from_transcript(R1, First_Year_Courses, R2),
+	second_year_cpsc_reqs(R2, R3),
+	courses_removed_from_transcript(R2, Second_Year_CPSC_Courses, R3),
+	second_year_math_stats_reqs(R3, R4),
+	courses_removed_from_transcript(R3, Second_Year_MATH_STAT_Courses, R4),
+	third_and_fourth_cpsc_reqs(R4, R5),
+	courses_removed_from_transcript(R4, Third_Fourth_Year_CPSC_Courses, R5),
+	communications_reqs(R5, R6),
+	courses_removed_from_transcript(R5, Communications_Courses, R6),
+	electives(R6, R7),
+	courses_removed_from_transcript(R6, Electives, R7).
 
 
 %arts is true when Result is Transcript - (4 courses that satisfy arts reqs)
@@ -62,7 +66,7 @@ second_year_math_stats_reqs(Transcript, RestOfTranscript) :- remove_courses_from
 second_year_math_stats_reqs(Transcript, RestOfTranscript) :- remove_courses_from_transcript( Transcript, [ stat241 ], RestOfTranscript).
 
 electives(Transcript, R2) :-
-	breadth_credits(Transcript, R1).
+	breadth_credits(Transcript, R1),
 	credits_earned_extra(R1, R2).
 
 
